@@ -24,15 +24,43 @@
             data-init-zoom="12"></div>
         <!-- Data attributes are used to set the initial values for the position and zoom level. -->
 
+        <div class="map-info">
+            <div class="region-info">
+                <h4 class="region-info-title">Regio Nijmegen</h4>
+                <p class="region-info-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error quas et
+                    possimus porro.</p>
+            </div>
+            <div class="map-legend">
+                <h4 class="map-legend-title">Legenda</h4>
+                <div class="map-legend-items">
+                    <div class="map-legend-item">
+                        <img src="assets/img/legend-bus.png" />
+                        <span>Busstation</span>
+                    </div>
+                    <div class="map-legend-item">
+                        <img src="assets/img/legend-train.png" />
+                        <span>Treinstation</span>
+                    </div>
+                </div>
+            </div>
+            <a onclick="history.back()" class="btn--back">&lt; Terug naar overzicht</a>
+        </div>
+
         <div class="marker-info" data-delay="300">
             <!-- Delay is applied on reopening and may be used when time-based animations are used on window toggle. -->
 
+            <button class="marker-info-close">
+                <span>Sluit venster</span>
+                <span class="css-icon--close"></span>
+            </button>
+            <!-- Classname 'marker-info-close' is targeted for closing the window. -->
+
             <h3 class="marker-info-target" data-key="name"></h3>
-            <p class="marker-info-target" data-key="type"></p>
+            <p class="marker-info-target" data-key="introText"></p>
+            <ul class="marker-info-target" data-key="infoItems" data-list-item="infoItem"></ul>
             <!-- A combination of classname "marker-info-target" and a data-key attribute is used to set the data of the current marker. -->
 
-            <button class="marker-info-close"></button>
-            <!-- Classname 'marker-info-close' is targeted for closing the window. -->
+
         </div>
 
 

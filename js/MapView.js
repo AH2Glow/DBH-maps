@@ -10,6 +10,8 @@ class MapView {
         markerInfoDelay: 0,
         makeClusters: false,
     };
+    _templates = {};
+    _domParser;
 
     constructor(id) {
         this._mapEl = document.getElementById(id);
@@ -17,20 +19,45 @@ class MapView {
         this._initiateMapOptions();
         this._initiateMarkerInfoOptions();
         this._initHandlerCloseInfoWindow();
+        this._domParser = new DOMParser();
     }
 
-    reOpenInfo() {
+    addTemplate(name, template, methods = {}) {
+        if (this._templates[name]) {
+            console.log(name + " template was already added...");
+            return;
+        }
+
+        this._templates = {
+            ...this._templates,
+            [name]: {
+                template,
+                methods,
+            },
+        };
+    }
+
+    setOptions(options) {
+        this._map.setOptions(options);
+    }
+
+    reOpenInfo(setInfo) {
         if (this._options.markerInfoDelay) {
             this.closeInfo();
-            setTimeout(() => this.openInfo(), this._options.markerInfoDelay);
+            setTimeout(() => {
+                this.openInfo(setInfo);
+            }, this._options.markerInfoDelay);
+        } else {
+            setInfo();
         }
     }
 
-    openInfo() {
+    openInfo(setInfo) {
         const isOpen = this._infoEl.classList.contains("open");
         if (isOpen) {
-            this.reOpenInfo();
+            this.reOpenInfo(setInfo);
         } else {
+            setInfo();
             this._infoEl.classList.add("open");
         }
     }
@@ -39,17 +66,87 @@ class MapView {
         this._infoEl.classList.remove("open");
     }
 
-    setInfo(markerInfo) {
-        const el = this._infoEl;
-        const keyElements = el.querySelectorAll(".marker-info-target");
+    removeChildren(el) {
+        while (el.firstChild) {
+            el.removeChild(el.lastChild);
+        }
+    }
+
+    createInfoElement(templateName, data) {
+        const { template, methods } = this._templates[templateName] || {};
+
+        if (!template) return { targets };
+
+        const html = this._domParser.parseFromString(template, "text/html");
+        const parent = html.querySelector("li");
+
+        const targets = html.querySelectorAll("li > .marker-info-target");
+
+        targets.forEach((target) => {
+            const method = methods[target.dataset.fn];
+
+            if (!method) return;
+
+            method(target, data);
+        });
+
+        return { parent, targets, methods };
+    }
+
+    setInfoList(listEl, data) {
+        this.removeChildren(listEl);
+
+        data.forEach((d) => {
+            const { parent, targets } = this.createInfoElement(
+                listEl.dataset.listItem,
+                d
+            );
+
+            if (!parent || !targets) return;
+
+            targets.forEach((el) => {
+                this.setInfoItem(el, d);
+                parent.appendChild(el);
+            });
+
+            listEl.appendChild(parent);
+        });
+    }
+
+    setInfoItem(el, markerInfo) {
+        if (typeof markerInfo === "string") {
+            el.innerText = markerInfo;
+            return;
+        }
+
+        const info = markerInfo[el.dataset.key];
+
+        if (!info) {
+            el.innerText = "";
+            return;
+        }
+
+        const tagName = el.tagName;
+
+        if (tagName === "UL") {
+            this.setInfoList(el, info);
+            return;
+        }
+
+        el.innerText = info;
+    }
+
+    setInfo(markerInfo, el) {
+        if (!el) {
+            el = document;
+        }
+
+        const keyElements = el.querySelectorAll(
+            ".marker-info > .marker-info-target"
+        );
 
         keyElements.forEach((el) => {
-            const key = el.dataset.key;
-
-            const info = markerInfo[key];
-            if (!info) return;
-
-            el.textContent = info;
+            this.setInfoItem(el, markerInfo);
         });
     }
 
@@ -79,8 +176,7 @@ class MapView {
             });
 
             marker.addListener("click", () => {
-                this.setInfo(m);
-                this.openInfo();
+                this.openInfo(() => this.setInfo(m));
                 this._map.panTo(position);
             });
 
@@ -127,78 +223,11 @@ class MapView {
 
     _getInitialOptions() {
         const { initLat, initLng, initZoom } = this._mapEl.dataset;
-        const styles = [
-            {
-                featureType: "administrative",
-                elementType: "all",
-                stylers: [{ visibility: "off" }],
-            },
-            {
-                featureType: "landscape",
-                elementType: "all",
-                stylers: [
-                    { visibility: "simplified" },
-                    { hue: "#0066ff" },
-                    { saturation: 74 },
-                    { lightness: 100 },
-                ],
-            },
-            {
-                featureType: "poi",
-                elementType: "all",
-                stylers: [{ visibility: "off" }],
-            },
-            {
-                featureType: "road",
-                elementType: "all",
-                stylers: [{ visibility: "simplified" }],
-            },
-            {
-                featureType: "road.highway",
-                elementType: "all",
-                stylers: [
-                    { visibility: "off" },
-                    { weight: 0.6 },
-                    { saturation: -85 },
-                    { lightness: 61 },
-                ],
-            },
-            {
-                featureType: "road.highway",
-                elementType: "geometry",
-                stylers: [{ visibility: "on" }],
-            },
-            {
-                featureType: "road.arterial",
-                elementType: "all",
-                stylers: [{ visibility: "off" }],
-            },
-            {
-                featureType: "road.local",
-                elementType: "all",
-                stylers: [{ visibility: "on" }],
-            },
-            {
-                featureType: "transit",
-                elementType: "all",
-                stylers: [{ visibility: "off" }],
-            },
-            {
-                featureType: "water",
-                elementType: "all",
-                stylers: [
-                    { visibility: "simplified" },
-                    { color: "#5f94ff" },
-                    { lightness: 26 },
-                    { gamma: 5.86 },
-                ],
-            },
-        ];
 
         return {
             zoom: +initZoom,
             center: { lat: +initLat, lng: +initLng },
-            styles,
+            disableDefaultUI: true,
         };
     }
 

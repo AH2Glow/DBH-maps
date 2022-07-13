@@ -4,6 +4,20 @@ const markerData = [
         name: "Nijmegen Centraal",
         coords: [51.843354399604415, 5.853041434638725],
         type: "Treinstation",
+        introText:
+            "Lorem ipsum dolor sit amet consectetur adipisicing elit. Vel repellendus et iste culpa possimus at blanditiis earum exercitationem molestias provident!",
+        infoItems: [
+            {
+                title: "320 parkeerplaatsen",
+                lines: [
+                    "Kosten 3,50 per dag",
+                    "Inclusief bus-retour voor 4 personen",
+                    "Vertrek .00 / .15 / .30 / .45",
+                    "Reistijd naar Heijendaal 28 min. / (tot Huygensgebouw 22 min)",
+                ],
+                type: "parking",
+            },
+        ],
     },
     {
         id: 4,

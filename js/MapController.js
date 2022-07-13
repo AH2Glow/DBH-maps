@@ -15,4 +15,14 @@ class MapController {
         this.view.initiateData(data);
         this.view.showMap();
     }
+
+    setStyle(styleArray) {
+        this.view.setOptions({ styles: styleArray });
+    }
+
+    addTemplates(templates) {
+        templates.forEach(({ name, template, methods }) => {
+            this.view.addTemplate(name, template, methods);
+        });
+    }
 }
