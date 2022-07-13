@@ -1,38 +1,26 @@
 const markerData = [
     {
-        id: 1,
-        name: "Home",
-        coords: [51.88523059370989, 5.8499235651604495],
-        type: "building",
-    },
-    {
-        id: 2,
-        name: "Work",
-        coords: [51.8406319017136, 5.861946509493154],
-        type: "building",
-    },
-    {
         id: 3,
-        name: "Nijmegen Central Station",
+        name: "Nijmegen Centraal",
         coords: [51.843354399604415, 5.853041434638725],
-        type: "train",
+        type: "Treinstation",
     },
     {
         id: 4,
-        name: "Busstop Vuurdoornstraat",
+        name: "Vuurdoornstraat",
         coords: [51.836410867350665, 5.832296973052754],
-        type: "bus",
+        type: "Busstation",
     },
     {
         id: 5,
-        name: "Arnhem Central Station",
+        name: "Arnhem Centraal",
         coords: [51.985033285838604, 5.8989933326116235],
-        type: "train",
+        type: "Treinstation",
     },
     {
         id: 6,
-        name: "Busstop Tunnelweg",
+        name: "Tunnelweg",
         coords: [51.84362836009828, 5.85530129428383],
-        type: "bus",
+        type: "Busstation",
     },
 ];

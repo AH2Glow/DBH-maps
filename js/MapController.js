@@ -6,11 +6,10 @@ class MapController {
 
         this.view.mapIconsToType(
             {
-                building: "building.svg",
-                train: "train.svg",
-                bus: "bus.svg",
+                Treinstation: "train.png",
+                Busstation: "bus.png",
             },
-            "assets/svg/"
+            "assets/img/"
         );
 
         this.view.initiateData(data);
