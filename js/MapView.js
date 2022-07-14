@@ -9,8 +9,10 @@ class MapView {
     _options = {
         markerInfoDelay: 0,
         makeClusters: false,
+        iconSize: [25, 25],
     };
     _templates = {};
+    _templateMethods = {};
     _domParser;
 
     constructor(id) {
@@ -34,6 +36,18 @@ class MapView {
                 template,
                 methods,
             },
+        };
+    }
+
+    addTemplateMethod(name, method) {
+        if (this._templateMethods[name]) {
+            console.log(name + " template method was already added...");
+            return;
+        }
+
+        this._templateMethods = {
+            ...this._templateMethods,
+            [name]: method,
         };
     }
 
@@ -72,8 +86,29 @@ class MapView {
         }
     }
 
+    getElementMethods(el) {
+        const methodNames = el.dataset.fn;
+
+        if (!methodNames) return;
+
+        const fn = el.dataset.fn.split(",");
+
+        const methods = fn
+            .filter((name) => this._templateMethods[name])
+            .map((name) => this._templateMethods[name]);
+        return methods;
+    }
+
+    executeElementMethods(el, data) {
+        const methods = this.getElementMethods(el);
+
+        if (!methods) return;
+
+        methods.forEach((m) => m(el, data));
+    }
+
     createInfoElement(templateName, data) {
-        const { template, methods } = this._templates[templateName] || {};
+        const { template } = this._templates[templateName] || {};
 
         if (!template) return { targets };
 
@@ -82,19 +117,23 @@ class MapView {
 
         const targets = html.querySelectorAll("li > .marker-info-target");
 
-        targets.forEach((target) => {
-            const method = methods[target.dataset.fn];
+        targets.forEach((el) =>
+            this.executeElementMethods.call(this, el, data)
+        );
 
-            if (!method) return;
-
-            method(target, data);
-        });
-
-        return { parent, targets, methods };
+        return { parent, targets };
     }
 
     setInfoList(listEl, data) {
         this.removeChildren(listEl);
+
+        if (!Array.isArray(data)) {
+            console.error(
+                "UL element does not accept data of type " + typeof data
+            );
+
+            return listEl.parentNode.removeChild(listEl);
+        }
 
         data.forEach((d) => {
             const { parent, targets } = this.createInfoElement(
@@ -162,7 +201,7 @@ class MapView {
 
             const icon = {
                 url: this._iconsMap[type],
-                scaledSize: new google.maps.Size(25, 25),
+                scaledSize: new google.maps.Size(...this._options.iconSize),
 
                 origin: new google.maps.Point(0, 0),
                 anchor: new google.maps.Point(0, 0),
@@ -245,11 +284,17 @@ class MapView {
     _initiateMapOptions() {
         if (!this._mapEl) return;
 
-        const { cluster } = this._mapEl.dataset;
+        const { cluster, iconSize = "30, 30" } = this._mapEl.dataset;
 
         if (cluster === "true") {
             this._options.makeClusters = true;
         }
+
+        const [width = 30, height = width] = iconSize
+            .split(",")
+            .map((num) => parseInt(num, 10) || undefined);
+
+        this._options.iconSize = [width, height];
     }
 
     _initHandlerCloseInfoWindow() {

@@ -1,22 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap");
-
-* {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
-}
-
-html,
-body {
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    font-family: "Roboto", sans-serif;
-}
-
-ul {
-    list-style: none;
-}
 #map {
     height: 100%;
 }
@@ -24,7 +5,9 @@ ul {
 .map-container {
     position: relative;
     width: 100%;
+    height: 100vh;
     overflow: hidden;
+    color: #456274;
 }
 
 .map-info {
@@ -59,12 +42,14 @@ ul {
     font-size: 25px;
     font-weight: bold;
     margin-bottom: 5px;
+    color: inherit;
 }
 
 .region-info-text {
     font-size: 17px;
     line-height: 1.33;
     max-width: fit-content;
+    color: inherit;
 }
 
 .map-legend {
@@ -93,18 +78,36 @@ ul {
 
 .marker-info {
     position: absolute;
-    top: 2rem;
+    top: 0;
     right: 0;
-    width: 50%;
-    height: 30%;
+    width: 500px;
+    height: 100%;
     background-color: white;
     transform: translateX(100%);
     opacity: 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     transition: transform, opacity;
     transition-duration: 0.3s;
     transition-timing-function: ease-in-out;
-    padding: 20px;
+    padding: 120px 60px 60px;
+    filter: drop-shadow(0px 0px 10px rgb(0 0 0 / 20%));
+}
+
+.marker-info::before {
+    content: "";
+    display: block;
+    width: 55px;
+    height: 55px;
+    position: absolute;
+    top: 25%;
+    left: 0;
+    transform: translateX(-50%) rotate(45deg);
+    background-color: #fff;
+}
+
+.marker-name {
+    font-size: 27px;
+    font-weight: 700;
+    margin-bottom: 5px;
 }
 
 .marker-info.open {
@@ -114,8 +117,8 @@ ul {
 
 .marker-info-close {
     position: absolute;
-    top: 20px;
-    right: 20px;
+    top: 60px;
+    right: 60px;
     color: #4aa881;
     background: none;
     border: none;
@@ -127,6 +130,10 @@ ul {
     transition-duration: 300ms;
 }
 
+.marker-info-close span {
+    color: inherit;
+}
+
 .marker-info-close:hover {
     color: #456274;
 }
@@ -136,7 +143,7 @@ ul {
     height: 30px;
     border-color: #4aa881;
     border-style: dotted;
-    border-width: 2px;
+    border-width: 1px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -147,7 +154,7 @@ ul {
     content: "";
     display: block;
     height: 24px;
-    width: 2px;
+    width: 4px;
     position: absolute;
     background: #4aa881;
     transition: background;
@@ -172,6 +179,37 @@ ul {
 .marker-info-close:hover .css-icon--close::after,
 .marker-info-close:hover .css-icon--close::before {
     background: #456274;
+}
+
+.info-items {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    border-top: 2px solid #99c7b1;
+    padding: 25px 0;
+    margin-top: 20px;
+}
+
+.info-item {
+    position: relative;
+    padding-left: 70px;
+}
+
+.info-item-img {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 60px;
+}
+
+.info-item-lines p {
+    margin-bottom: 0;
+}
+
+.info-item-heading {
+    margin-bottom: 5px;
+    font-size: 19px;
+    font-weight: 700;
 }
 
 .map-info .btn--back {

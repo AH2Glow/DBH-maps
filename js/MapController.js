@@ -9,7 +9,7 @@ class MapController {
                 Treinstation: "train.png",
                 Busstation: "bus.png",
             },
-            "assets/img/"
+            "/images/"
         );
 
         this.view.initiateData(data);
@@ -23,6 +23,12 @@ class MapController {
     addTemplates(templates) {
         templates.forEach(({ name, template, methods }) => {
             this.view.addTemplate(name, template, methods);
+        });
+    }
+
+    addTemplateMethods(templateMethods) {
+        Object.entries(templateMethods).forEach(([name, method]) => {
+            this.view.addTemplateMethod(name, method);
         });
     }
 }

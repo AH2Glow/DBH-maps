@@ -17,6 +17,15 @@ const markerData = [
                 ],
                 type: "parking",
             },
+            {
+                title: "Fietsenstalling",
+                lines: [
+                    "1200 plaatsen",
+                    "Dag en nacht bereikbaar",
+                    "Voorzien van camera beveiliging",
+                ],
+                type: "parking",
+            },
         ],
     },
     {
