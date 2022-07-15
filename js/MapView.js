@@ -2,6 +2,7 @@ class MapView {
     _map;
     _mapEl;
     _infoEl;
+    _mainWindowEl;
     _data;
     _markers = [];
     _iconsMap = {};
@@ -18,9 +19,12 @@ class MapView {
     constructor(id) {
         this._mapEl = document.getElementById(id);
         this._infoEl = document.querySelector(".marker-info");
+        this._mainWindowEl = document.querySelector(".map-info");
         this._initiateMapOptions();
         this._initiateMarkerInfoOptions();
         this._initHandlerCloseInfoWindow();
+        this._initHandlerToggleMainWindow();
+
         this._domParser = new DOMParser();
     }
 
@@ -78,6 +82,10 @@ class MapView {
 
     closeInfo() {
         this._infoEl.classList.remove("open");
+    }
+
+    toggleMainWindow() {
+        this._mainWindowEl.classList.toggle("hide");
     }
 
     removeChildren(el) {
@@ -302,5 +310,11 @@ class MapView {
         if (!btn) return;
 
         btn.addEventListener("click", this.closeInfo.bind(this));
+    }
+
+    _initHandlerToggleMainWindow() {
+        const btn = this._mainWindowEl.querySelector(".map-info-toggle");
+        if (!btn) return;
+        btn.addEventListener("click", this.toggleMainWindow.bind(this));
     }
 }

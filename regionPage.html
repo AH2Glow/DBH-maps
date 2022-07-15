@@ -28,27 +28,37 @@
             data-init-zoom="12" data-icon-size="60"></div>
         <!-- Data attributes are used to set the initial values for the position and zoom level. -->
 
-        <div class="map-info">
-            <div class="region-info">
-                <h4 class="region-info-title">Regio Nijmegen</h4>
-                <p class="region-info-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error quas et
-                    possimus porro.</p>
-            </div>
-            <div class="map-legend">
-                <h4 class="map-legend-title">Legenda</h4>
-                <div class="map-legend-items">
-                    <div class="map-legend-item">
-                        <img src="/images/legend-bus.png" />
-                        <span>Busstation</span>
+        <div class="map-info-container">
+            <div class="map-info">
+                <div class="region-info">
+                    <div class="region-info-header">
+                        <h4 class="region-info-title">Regio Nijmegen</h4>
+                        <button class="map-info-toggle">
+                            <img class="map-info-toggle--open" src="/images/map-info-open.png" />
+                            <img class="map-info-toggle--close" src="/images/map-info-close.png" />
+                        </button>
                     </div>
-                    <div class="map-legend-item">
-                        <img src="/images/legend-train.png" />
-                        <span>Treinstation</span>
+
+                    <p class="region-info-text">Lorem, ipsum dolor sit amet consectetur adipisicing elit. Error quas et
+                        possimus porro.</p>
+                </div>
+                <div class="map-legend">
+                    <h4 class="map-legend-title">Legenda</h4>
+                    <div class="map-legend-items">
+                        <div class="map-legend-item">
+                            <img src="/images/legend-bus.png" />
+                            <span>Busstation</span>
+                        </div>
+                        <div class="map-legend-item">
+                            <img src="/images/legend-train.png" />
+                            <span>Treinstation</span>
+                        </div>
                     </div>
                 </div>
+                <a onclick="history.back()" class="btn--back">&lt; Terug naar overzicht</a>
             </div>
-            <a onclick="history.back()" class="btn--back">&lt; Terug naar overzicht</a>
         </div>
+
 
         <div class="marker-info" data-delay="300">
             <!-- Delay is applied on reopening and may be used when time-based animations are used on window toggle. -->
